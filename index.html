@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fortune Tiger Slots 🐯🎰</title>
+  <!-- Fonte moderna e divertida -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Canvas para efeito de confetes nas vitórias -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- ==============================================
+       1. TELA INICIAL (SPLASH SCREEN FORTUNE TIGER)
+       ============================================== -->
+  <div id="splash-screen" class="splash-screen">
+    <div class="splash-card">
+      <div class="splash-image-wrapper">
+        <img src="splash.png" alt="Fortune Tiger - Começar" class="splash-img" id="splash-img">
+        <!-- Botão interativo Começar posicionado sobre o botão do banner -->
+        <button id="start-game-btn" class="splash-start-btn" aria-label="Começar Jogo">
+          <span class="btn-glow-pulse"></span>
+          <span class="btn-text">Começar</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==============================================
+       2. TELA PRINCIPAL DO JOGO (CAÇA-NÍQUEL 3x3)
+       ============================================== -->
+  <div id="game-container" class="game-container hidden">
+    <!-- Topo / Cabeçalho Oriental -->
+    <header class="temple-roof">
+      <button id="home-btn" class="header-btn" title="Voltar à Tela Inicial" aria-label="Voltar à tela inicial">
+        🏠 Início
+      </button>
+
+      <div class="mascot-badge">
+        <span class="mascot-emoji">🐯</span>
+        <span class="mascot-text">FORTUNE TIGER 3×3</span>
+      </div>
+
+      <button id="sound-btn" class="header-btn sound-toggle" title="Ativar/Desativar Som" aria-label="Alternar som">
+        🔊
+      </button>
+    </header>
+
+    <!-- Gabinete do Caça-Níquel Dourado 3x3 (3 Linhas x 3 Colunas) -->
+    <main class="slot-machine">
+      <!-- Indicador visual das 5 linhas de pagamento -->
+      <div class="payline-indicators">
+        <span class="payline-tag">5 LINHAS DE PAGAMENTO</span>
+      </div>
+
+      <div class="slot-grid" id="slot-grid">
+        <!-- Coluna 1 -->
+        <div class="reel-column" id="reel-col-0">
+          <div class="reel-cell" id="cell-0-0"><span class="symbol">🐯</span></div>
+          <div class="reel-cell" id="cell-1-0"><span class="symbol">🪙</span></div>
+          <div class="reel-cell" id="cell-2-0"><span class="symbol">🍊</span></div>
+        </div>
+
+        <!-- Coluna 2 -->
+        <div class="reel-column" id="reel-col-1">
+          <div class="reel-cell" id="cell-0-1"><span class="symbol">🪙</span></div>
+          <div class="reel-cell" id="cell-1-1"><span class="symbol">🐯</span></div>
+          <div class="reel-cell" id="cell-2-1"><span class="symbol">🧧</span></div>
+        </div>
+
+        <!-- Coluna 3 -->
+        <div class="reel-column" id="reel-col-2">
+          <div class="reel-cell" id="cell-0-2"><span class="symbol">🧧</span></div>
+          <div class="reel-cell" id="cell-1-2"><span class="symbol">💎</span></div>
+          <div class="reel-cell" id="cell-2-2"><span class="symbol">🐯</span></div>
+        </div>
+      </div>
+
+      <!-- Enfeites de lanternas / luzes arcade nas bordas -->
+      <div class="lights-deco left-lights">
+        <span></span><span></span><span></span>
+      </div>
+      <div class="lights-deco right-lights">
+        <span></span><span></span><span></span>
+      </div>
+    </main>
+
+    <!-- Faixa Dourada de Mensagem e Vitória -->
+    <div id="message-bar" class="message-bar">
+      🐯 O Tigrinho da Sorte está pronto! Faça sua aposta!
+    </div>
+
+    <!-- Painel de Moedas (Saldo, Aposta, Último Prêmio) -->
+    <section class="scoreboard">
+      <div class="score-card">
+        <span class="label">SALDO</span>
+        <span id="balance" class="value">1000</span>
+      </div>
+      <div class="score-card highlight">
+        <span class="label">APOSTA TOTAL</span>
+        <span id="current-bet-display" class="value cost">10</span>
+      </div>
+      <div class="score-card">
+        <span class="label">ÚLTIMO GANHO</span>
+        <span id="last-win" class="value win">0</span>
+      </div>
+    </section>
+
+    <!-- Seletor de Aposta com Campo para Digitar Valor -->
+    <section class="bet-controls">
+      <div class="bet-input-header">
+        <span class="bet-label-title">🪙 DIGITE OU AJUSTE SUA APOSTA</span>
+      </div>
+
+      <div class="bet-input-row">
+        <button id="bet-minus-btn" class="bet-step-btn" title="Diminuir Aposta" aria-label="Diminuir aposta">−</button>
+        <div class="bet-input-wrapper">
+          <span class="bet-currency-symbol">🪙</span>
+          <input 
+            type="number" 
+            id="bet-input" 
+            class="bet-number-input" 
+            value="10" 
+            min="1" 
+            max="100000" 
+            step="1"
+            placeholder="Valor"
+            aria-label="Digitar valor da aposta"
+          />
+        </div>
+        <button id="bet-plus-btn" class="bet-step-btn" title="Aumentar Aposta" aria-label="Aumentar aposta">+</button>
+      </div>
+
+      <!-- Botões rápidos de aposta -->
+      <div class="quick-bets">
+        <button class="bet-chip active" data-bet="10">10</button>
+        <button class="bet-chip" data-bet="25">25</button>
+        <button class="bet-chip" data-bet="50">50</button>
+        <button class="bet-chip" data-bet="100">100</button>
+        <button class="bet-chip" data-bet="250">250</button>
+        <button class="bet-chip max-bet" data-bet="500">MÁX 🚀</button>
+      </div>
+    </section>
+
+    <!-- Área de Ações e Botões de Controle (Turbo + Girar) -->
+    <div class="controls-area">
+      <div class="action-buttons-grid">
+        <!-- Botão TURBO para rodar super rápido -->
+        <button id="turbo-btn" class="btn-turbo" title="Modo Turbo: Gira e para muito mais rápido!" aria-label="Alternar Modo Turbo">
+          <span class="turbo-icon">⚡</span>
+          <span class="turbo-text">TURBO</span>
+          <span id="turbo-status" class="turbo-badge">OFF</span>
+        </button>
+
+        <!-- Botão Principal GIRAR -->
+        <button id="spin-btn" class="btn-spin">
+          <span class="spin-icon">🎰</span>
+          <span class="spin-text">GIRAR</span>
+          <span id="spin-sub-text" class="spin-sub">APOSTA: 10 🪙</span>
+        </button>
+      </div>
+
+      <!-- Botão Recomeçar (ativo quando o saldo acaba ou para reiniciar) -->
+      <button id="reset-btn" class="btn-reset hidden">
+        🔄 RECOMEÇAR (RESTAURAR 1000 MOEDAS)
+      </button>
+    </div>
+
+    <!-- Tabela simples de prêmios com multiplicadores e linhas -->
+    <footer class="payout-info">
+      <div class="payout-symbols">
+        <span>🐯x3: <strong>50x</strong></span>
+        <span>🪙x3: <strong>30x</strong></span>
+        <span>🧧x3: <strong>20x</strong></span>
+        <span>💎x3: <strong>15x</strong></span>
+        <span>🔔x3: <strong>10x</strong></span>
+        <span>🍊x3: <strong>5x</strong></span>
+      </div>
+      <p class="sub-info">✨ 5 Linhas de Pagamento (3 horizontais + 2 diagonais). 2 iguais pagam 1.5x!</p>
+      <p class="jackpot-info">🔥 <strong>TELA CHEIA:</strong> Ganhe multiplicador especial de 10x!</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

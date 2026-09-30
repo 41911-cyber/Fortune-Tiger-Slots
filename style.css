@@ -1,0 +1,943 @@
+/* ===================================================
+   FORTUNE TIGER SLOTS 3x3 - ESTILOS VISUAIS
+   Tema: Templo Oriental Dourado e Vermelho Festivo
+   Cores: Vermelho Imperial (#800f2f), Dourado (#ffd700),
+          Laranja (#fb5607), Jade (#06d6a0), Neon Turbo (#ffb703)
+   =================================================== */
+
+:root {
+  --bg-deep: #250207;
+  --bg-crimson: #5c0715;
+  --gold-primary: #ffd700;
+  --gold-glow: #ffb703;
+  --gold-dark: #b38600;
+  --red-accent: #d90429;
+  --jade-green: #06d6a0;
+  --jade-glow: #05f2b5;
+  --text-gold: #fff3b0;
+  --card-bg: rgba(0, 0, 0, 0.55);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Fredoka', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: radial-gradient(circle at 50% 25%, #7a091a 0%, #2b0207 65%, #150104 100%);
+  color: #ffffff;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 12px;
+  overflow-x: hidden;
+  user-select: none;
+}
+
+/* Canvas dos Confetes */
+#confetti-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ===================================================
+   1. TELA INICIAL (SPLASH SCREEN FORTUNE TIGER)
+   =================================================== */
+.splash-screen {
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: splashFadeIn 0.5s ease-out;
+}
+
+@keyframes splashFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.splash-screen.fade-out {
+  opacity: 0;
+  transform: scale(0.94) translateY(-20px);
+  pointer-events: none;
+}
+
+.splash-card {
+  width: 100%;
+  background: #1f0106;
+  border: 4px solid var(--gold-primary);
+  border-radius: 28px;
+  box-shadow: 0 0 45px rgba(255, 215, 0, 0.45), 0 25px 60px rgba(0, 0, 0, 0.95);
+  overflow: hidden;
+  position: relative;
+}
+
+.splash-image-wrapper {
+  position: relative;
+  width: 100%;
+  line-height: 0;
+}
+
+.splash-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* Botão COMEÇAR Interativo sobre o Banner */
+.splash-start-btn {
+  position: absolute;
+  left: 50%;
+  top: 76.5%;
+  transform: translate(-50%, -50%);
+  width: 58%;
+  height: 48px;
+  background: linear-gradient(180deg, #f43f5e 0%, #e11d48 40%, #be123c 100%);
+  border: 2.5px solid #ffd700;
+  border-radius: 26px;
+  color: #ffffff;
+  font-family: 'Fredoka', inherit;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: 0 0 25px rgba(244, 63, 94, 0.85), 0 6px 15px rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, filter 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+  animation: startBtnPulse 1.8s infinite ease-in-out;
+}
+
+@keyframes startBtnPulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: 0 0 20px rgba(244, 63, 94, 0.7), 0 6px 15px rgba(0, 0, 0, 0.6);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.06);
+    box-shadow: 0 0 35px rgba(255, 215, 0, 0.9), 0 8px 25px rgba(244, 63, 94, 0.95);
+  }
+}
+
+.splash-start-btn:hover {
+  filter: brightness(1.15);
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+.splash-start-btn:active {
+  transform: translate(-50%, -50%) scale(0.96);
+  box-shadow: 0 0 10px rgba(244, 63, 94, 0.6);
+}
+
+.splash-start-btn .btn-text {
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.splash-start-btn .btn-glow-pulse {
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 40%;
+  height: 200%;
+  background: linear-gradient(
+    60deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(25deg);
+  animation: shineGlow 2.5s infinite;
+}
+
+/* ===================================================
+   2. CONTAINER PRINCIPAL DO JOGO (TELA DO CAÇA-NÍQUEL)
+   =================================================== */
+.game-container {
+  width: 100%;
+  max-width: 460px;
+  background: linear-gradient(180deg, #4d0713 0%, #290208 100%);
+  border: 4px solid var(--gold-primary);
+  border-radius: 28px;
+  padding: 16px 14px;
+  box-shadow: 0 0 35px rgba(255, 215, 0, 0.4), 0 20px 50px rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  animation: gameEntranceAnim 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes gameEntranceAnim {
+  0% {
+    opacity: 0;
+    transform: scale(0.92) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Cabeçalho Oriental */
+.temple-roof {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.header-btn {
+  background: rgba(0, 0, 0, 0.45);
+  border: 2px solid var(--gold-primary);
+  color: #fff;
+  border-radius: 14px;
+  padding: 6px 10px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: transform 0.15s, background 0.2s, box-shadow 0.2s;
+}
+
+.header-btn:hover {
+  transform: scale(1.08);
+  background: rgba(255, 215, 0, 0.2);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+}
+
+.sound-toggle {
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 1.15rem;
+}
+
+.mascot-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(90deg, #b38600, #ffd700, #b38600);
+  padding: 4px 14px;
+  border-radius: 20px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 215, 0, 0.5);
+  border: 1px solid #fff;
+}
+
+.mascot-emoji {
+  font-size: 1.5rem;
+  animation: tigerWiggle 2.5s infinite ease-in-out;
+  display: inline-block;
+}
+
+@keyframes tigerWiggle {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(-8deg) scale(1.1); }
+  75% { transform: rotate(8deg) scale(1.1); }
+}
+
+.mascot-text {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #4a000a;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* ===================================================
+   3. GABINETE DO CAÇA-NÍQUEL 3x3 (3 LINHAS X 3 COLUNAS)
+   =================================================== */
+.slot-machine {
+  width: 100%;
+  background: linear-gradient(180deg, #1d0105 0%, #0d0003 100%);
+  border: 4px solid var(--gold-primary);
+  border-radius: 22px;
+  padding: 12px 10px;
+  position: relative;
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.95), 0 0 25px rgba(255, 215, 0, 0.4);
+}
+
+.payline-indicators {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.payline-tag {
+  display: inline-block;
+  background: linear-gradient(90deg, rgba(255, 215, 0, 0.15), rgba(255, 215, 0, 0.35), rgba(255, 215, 0, 0.15));
+  border: 1px solid rgba(255, 215, 0, 0.5);
+  color: #ffe699;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 2px 12px;
+  border-radius: 10px;
+}
+
+/* Grade 3x3: 3 Colunas x 3 Linhas */
+.slot-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  width: 100%;
+}
+
+.reel-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.reel-cell {
+  height: 82px;
+  background: linear-gradient(180deg, #fffdf0 0%, #fef3c7 50%, #fde68a 100%);
+  border: 2.5px solid #d4af37;
+  border-radius: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.25), 0 3px 8px rgba(0, 0, 0, 0.5);
+  position: relative;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.symbol {
+  font-size: 2.75rem;
+  line-height: 1;
+  transition: transform 0.1s ease-out;
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.35));
+}
+
+/* Animações de Rotação */
+.reel-column.spinning .symbol {
+  animation: cellSpin 0.12s infinite linear;
+  filter: blur(1.5px);
+}
+
+.reel-column.turbo-spinning .symbol {
+  animation: cellSpinFast 0.06s infinite linear;
+  filter: blur(2.5px);
+}
+
+@keyframes cellSpin {
+  0% { transform: translateY(-35px); opacity: 0.5; }
+  50% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(35px); opacity: 0.5; }
+}
+
+@keyframes cellSpinFast {
+  0% { transform: translateY(-45px); opacity: 0.3; }
+  50% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(45px); opacity: 0.3; }
+}
+
+/* Destaque das Células Vencedoras */
+.reel-cell.winner {
+  border-color: #ffd700;
+  background: linear-gradient(180deg, #fffbeb 0%, #fde047 50%, #facc15 100%);
+  box-shadow: 0 0 25px #ffd700, inset 0 0 16px rgba(255, 215, 0, 0.8);
+  animation: winnerCellPulse 0.55s infinite alternate ease-in-out;
+  z-index: 5;
+}
+
+@keyframes winnerCellPulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.06); }
+}
+
+/* Lanternas decorativas laterais */
+.lights-deco {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.left-lights { left: 4px; }
+.right-lights { right: 4px; }
+
+.lights-deco span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold-primary);
+  box-shadow: 0 0 8px var(--gold-primary);
+  animation: blinkLights 1.2s infinite alternate;
+}
+
+.lights-deco span:nth-child(2) {
+  animation-delay: 0.4s;
+  background: #ff0055;
+  box-shadow: 0 0 8px #ff0055;
+}
+
+.lights-deco span:nth-child(3) {
+  animation-delay: 0.8s;
+  background: #06d6a0;
+  box-shadow: 0 0 8px #06d6a0;
+}
+
+@keyframes blinkLights {
+  from { opacity: 0.35; }
+  to { opacity: 1; transform: scale(1.25); }
+}
+
+/* Faixa Dourada de Mensagem */
+.message-bar {
+  width: 100%;
+  background: linear-gradient(90deg, rgba(80, 5, 15, 0.9), rgba(120, 10, 25, 0.95), rgba(80, 5, 15, 0.9));
+  border: 2px solid var(--gold-primary);
+  border-radius: 14px;
+  padding: 8px 12px;
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 600;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-gold);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s;
+}
+
+.message-bar.win {
+  background: linear-gradient(90deg, #d90429, #ffb703, #d90429);
+  color: #2b0207;
+  font-size: 1.08rem;
+  font-weight: 700;
+  animation: bounceMessage 0.5s ease;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+  border-color: #ffffff;
+}
+
+@keyframes bounceMessage {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+
+/* Painel de Moedas (Scoreboard) */
+.scoreboard {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 1.1fr;
+  gap: 8px;
+}
+
+.score-card {
+  background: rgba(0, 0, 0, 0.55);
+  border: 2px solid rgba(255, 215, 0, 0.35);
+  border-radius: 14px;
+  padding: 6px 4px;
+  text-align: center;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.6);
+}
+
+.score-card.highlight {
+  border-color: var(--gold-primary);
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.score-card .label {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #ffc300;
+  letter-spacing: 0.5px;
+}
+
+.score-card .value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.score-card .value.cost {
+  color: #ff9e00;
+}
+
+.score-card .value.win {
+  color: #06d6a0;
+  text-shadow: 0 0 10px rgba(6, 214, 160, 0.4);
+}
+
+/* ===================================================
+   4. CONTROLE DE APOSTAS COM CAMPO DE DIGITAR VALOR
+   =================================================== */
+.bet-controls {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(255, 215, 0, 0.35);
+  border-radius: 16px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bet-input-header {
+  text-align: center;
+}
+
+.bet-label-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #ffd700;
+  letter-spacing: 0.8px;
+}
+
+.bet-input-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.bet-step-btn {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(180deg, #d90429 0%, #7d0016 100%);
+  border: 2px solid var(--gold-primary);
+  border-radius: 50%;
+  color: #fff;
+  font-size: 1.4rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+  flex-shrink: 0;
+}
+
+.bet-step-btn:hover:not(:disabled) {
+  transform: scale(1.1);
+  background: #ff1a40;
+}
+
+.bet-step-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.bet-step-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* Campo Central para Digitar a Aposta */
+.bet-input-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.75);
+  border: 2.5px solid var(--gold-primary);
+  border-radius: 14px;
+  padding: 4px 10px;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.8), 0 0 10px rgba(255, 215, 0, 0.2);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.bet-input-wrapper:focus-within {
+  border-color: #06d6a0;
+  box-shadow: 0 0 15px rgba(6, 214, 160, 0.6), inset 0 2px 6px rgba(0, 0, 0, 0.8);
+}
+
+.bet-currency-symbol {
+  font-size: 1.25rem;
+  margin-right: 6px;
+}
+
+.bet-number-input {
+  width: 100%;
+  max-width: 130px;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #ffd700;
+  font-family: inherit;
+  font-size: 1.35rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* Remove botões nativos de spin do input number */
+.bet-number-input::-webkit-outer-spin-button,
+.bet-number-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.bet-number-input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* Botões rápidos de aposta */
+.quick-bets {
+  display: flex;
+  gap: 5px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.bet-chip {
+  flex: 1;
+  min-width: 44px;
+  padding: 6px 2px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(255, 215, 0, 0.4);
+  border-radius: 10px;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.bet-chip:hover {
+  background: rgba(255, 215, 0, 0.2);
+  border-color: var(--gold-primary);
+  transform: translateY(-1px);
+}
+
+.bet-chip.active {
+  background: linear-gradient(180deg, #ffc300 0%, #ff8800 100%);
+  color: #2b0207;
+  border-color: #ffffff;
+  box-shadow: 0 0 10px rgba(255, 195, 0, 0.7);
+  transform: scale(1.04);
+}
+
+.bet-chip.max-bet {
+  background: linear-gradient(180deg, #06d6a0 0%, #00875a 100%);
+  color: #ffffff;
+  border-color: #05f2b5;
+}
+
+.bet-chip.max-bet.active {
+  background: linear-gradient(180deg, #05f2b5 0%, #06d6a0 100%);
+  color: #0d3829;
+  box-shadow: 0 0 12px rgba(6, 214, 160, 0.8);
+}
+
+/* ===================================================
+   5. BOTÕES DE AÇÃO: TURBO E GIRAR
+   =================================================== */
+.controls-area {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.action-buttons-grid {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 10px;
+  width: 100%;
+}
+
+/* Botão TURBO */
+.btn-turbo {
+  height: 66px;
+  background: linear-gradient(180deg, #2d3748 0%, #1a202c 100%);
+  border: 2.5px solid rgba(255, 215, 0, 0.35);
+  border-radius: 18px;
+  color: #cbd5e1;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  transition: all 0.2s ease;
+  box-shadow: 0 5px 0 #0f172a, 0 6px 12px rgba(0, 0, 0, 0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-turbo .turbo-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+  transition: transform 0.2s;
+}
+
+.btn-turbo .turbo-text {
+  font-size: 0.78rem;
+  letter-spacing: 0.5px;
+}
+
+.btn-turbo .turbo-badge {
+  background: #475569;
+  color: #f1f5f9;
+  font-size: 0.6rem;
+  font-weight: 800;
+  padding: 1px 7px;
+  border-radius: 10px;
+  letter-spacing: 0.5px;
+}
+
+/* Estado Ativo do TURBO (Aura dourada/elétrica) */
+.btn-turbo.active {
+  background: linear-gradient(180deg, #f59e0b 0%, #d97706 60%, #b45309 100%);
+  border-color: #ffd700;
+  color: #ffffff;
+  box-shadow: 0 5px 0 #78350f, 0 0 25px rgba(245, 158, 11, 0.85);
+  transform: translateY(-1px);
+}
+
+.btn-turbo.active .turbo-icon {
+  animation: turboIconShake 0.4s infinite alternate;
+  color: #fff;
+  filter: drop-shadow(0 0 6px #fff);
+}
+
+@keyframes turboIconShake {
+  from { transform: scale(1) rotate(-5deg); }
+  to { transform: scale(1.2) rotate(5deg); }
+}
+
+.btn-turbo.active .turbo-badge {
+  background: #ffffff;
+  color: #b45309;
+}
+
+.btn-turbo:hover:not(:disabled) {
+  filter: brightness(1.1);
+}
+
+.btn-turbo:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 #0f172a;
+}
+
+/* Botão GIRAR Estilo Jade e Ouro */
+.btn-spin {
+  height: 66px;
+  background: linear-gradient(180deg, #06d6a0 0%, #05a077 50%, #02664b 100%);
+  border: 3.5px solid var(--gold-primary);
+  border-radius: 20px;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  cursor: pointer;
+  box-shadow: 0 8px 0 #014230, 0 12px 25px rgba(6, 214, 160, 0.5);
+  transition: all 0.15s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-spin::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 40%;
+  height: 200%;
+  background: linear-gradient(
+    60deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(25deg);
+  animation: shineGlow 3s infinite;
+}
+
+@keyframes shineGlow {
+  0% { left: -60%; }
+  25% { left: 140%; }
+  100% { left: 140%; }
+}
+
+.btn-spin:hover:not(:disabled) {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+  box-shadow: 0 10px 0 #014230, 0 15px 30px rgba(6, 214, 160, 0.7);
+}
+
+.btn-spin:active:not(:disabled) {
+  transform: translateY(6px);
+  box-shadow: 0 2px 0 #014230, 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.btn-spin:disabled {
+  background: #475569;
+  border-color: #64748b;
+  color: #94a3b8;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-spin:disabled::after {
+  display: none;
+}
+
+.spin-sub {
+  font-size: 0.72rem;
+  letter-spacing: 0.5px;
+  color: #ffe699;
+  font-weight: 600;
+}
+
+/* Botão Recomeçar */
+.btn-reset {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(180deg, #d90429 0%, #99001b 100%);
+  border: 2px solid var(--gold-primary);
+  border-radius: 14px;
+  color: white;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #57000f, 0 8px 15px rgba(217, 4, 41, 0.4);
+  transition: all 0.2s;
+}
+
+.btn-reset:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.1);
+}
+
+.btn-reset:active {
+  transform: translateY(3px);
+  box-shadow: none;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ===================================================
+   6. TABELA DE PRÊMIOS E LINHAS DE PAGAMENTO
+   =================================================== */
+.payout-info {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 14px;
+  padding: 8px 10px;
+  text-align: center;
+  font-size: 0.72rem;
+  color: #ffe8b3;
+  line-height: 1.4;
+  border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.payout-symbols {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.payout-symbols span {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 2px 6px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 215, 0, 0.15);
+}
+
+.payout-info .sub-info {
+  color: var(--gold-primary);
+  margin-top: 3px;
+  font-weight: 600;
+}
+
+.payout-info .jackpot-info {
+  color: #ff0055;
+  margin-top: 2px;
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(255, 0, 85, 0.4);
+}
+
+/* ===================================================
+   7. RESPONSIVIDADE PARA SMARTPHONES
+   =================================================== */
+@media (max-width: 440px) {
+  body {
+    padding: 8px 6px;
+  }
+
+  .game-container {
+    padding: 12px 10px;
+    border-radius: 20px;
+  }
+
+  .mascot-text {
+    font-size: 0.95rem;
+  }
+
+  .reel-cell {
+    height: 72px;
+  }
+
+  .symbol {
+    font-size: 2.3rem;
+  }
+
+  .action-buttons-grid {
+    grid-template-columns: 85px 1fr;
+  }
+
+  .btn-spin {
+    height: 60px;
+    font-size: 1.35rem;
+  }
+
+  .btn-turbo {
+    height: 60px;
+  }
+
+  .bet-chip {
+    font-size: 0.78rem;
+    padding: 5px 2px;
+  }
+}
